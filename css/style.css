@@ -16,15 +16,17 @@ ion-icon {
 }
 
 .footer ion-icon {
-    width: 26px;
-    height: 26px;
+    width: 30px;
+    height: 30px;
 }
 
-input {
+.footer input {
     color: black;
     border: none;
     font-size: 18px;
     line-height: 21.09px;
+    margin-top: 12px;
+    margin-bottom: 2px;
 }
 
 .header {
@@ -41,6 +43,12 @@ input {
     position: fixed;
     left: 0px;
     top: 0px;
+    z-index: 1;
+}
+
+.header img {
+    width: 75px;
+    height: 53px;
 }
 
 .desktop-content {
@@ -90,4 +98,135 @@ input {
     position: fixed;
     left: 0px;
     bottom: 0px;
+    z-index: 1;
+}
+
+.hidden {
+    display: none;
+}
+
+.footer input::-webkit-input-placeholder {
+    color: black;
+    font-style: italic;
+}
+
+/* layout bonus */
+
+.footer p {
+    color: #505050;
+    font-size: 14px;
+    font-weight: 300;
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+.overlay {
+    background-color: #00000099;
+    width: 100%;
+    height: 100%;
+
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    z-index: 2;
+}
+
+.lateral-bar {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 18.75px;
+
+    background-color: white;
+    width: 260px;
+    height: 100%;
+
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    z-index: 3;
+}
+
+.lateral-bar ion-icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 6px;
+}
+
+h1 {
+    font-weight: 700;
+    text-align: center;
+}
+
+.lateral-bar .title {
+    width: 100%;
+    padding: 25px 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item {
+    height: 36px;
+    margin: 0 16px 1px 18px;
+    display: flex;
+    align-items: center;
+}
+
+.item p {
+    margin-top: 5px;
+}
+
+/* tela de login */
+
+.login {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+
+    display: none; /*flex*/
+    flex-direction: column;
+    align-items: center;
+
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    z-index: 4;
+}
+
+.login img {
+    width: 130px;
+    height: 92px;
+    margin-top: 72px;
+    margin-bottom: 94px;
+}
+
+.login input::-webkit-input-placeholder {
+    color: #AEAEAE;
+}
+
+.login input {
+    font-size: 18px;
+    line-height: 25px;
+    text-align: center;
+
+    width: 260px;
+    height: 54px;
+    border: 1px solid #D7D7D7;
+    border-radius: 4px;
+}
+
+.login button {
+    background-color: #E7E7E7;
+
+    color: #696969;
+    font-size: 18px;
+    line-height: 25px;
+    text-align: center;
+
+    width: 109px;
+    height: 45px;
+    border: none;
+    border-radius: 9px;
+    margin-top: 15px;
 }
