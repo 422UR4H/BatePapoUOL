@@ -24,10 +24,12 @@
 <body>
     <div class="header">
         <img src="./images/logo.png" alt="logo bate papo UOL" />
-        <ion-icon name="people"></ion-icon>
+        <button onclick="toggleSideBar()">
+            <ion-icon name="people"></ion-icon>
+        </button>
     </div>
     <ul class="content">
-        
+        <!-- li insert by javascript -->
     </ul>
 
     <div class="footer">
@@ -42,42 +44,55 @@
 
     <!-- bonus -->
     
-    <div class="overlay hidden">
-        <div class="lateral-bar">
-            <div class="title">
-                <h1>Escolha um contato para enviar mensagem:</h1>
-            </div>
-            <div class="item">
+    <div class="overlay hidden" onclick="toggleSideBar()"></div>
+    <div class="side-bar">
+
+        <div class="title">
+            <h1>Escolha um contato para enviar mensagem:</h1>
+        </div>
+        <div class="contacts">
+            <div class="item selected" onclick="selectItem('contacts', this)">
                 <ion-icon name="people"></ion-icon>
                 <p>Todos</p>
+                <img src="./images/check.png" alt="">
             </div>
-            <div class="item">
+            <div class="item" onclick="selectItem('contacts', this)">
                 <ion-icon name="person-circle"></ion-icon>
                 <p>João</p>
+                <img src="./images/check.png" alt="">
             </div>
-            <div class="item">
+            <div class="item" onclick="selectItem('contacts', this)">
                 <ion-icon name="person-circle"></ion-icon>
                 <p>Maria</p>
-            </div>
-            <div class="title">
-                <h1>Escolha a visibilidade:</h1>
-            </div>
-            <div class="item">
-                <ion-icon name="lock-open"></ion-icon>
-                <p>Público</p>
-            </div>
-            <div class="item">
-                <ion-icon name="lock-closed"></ion-icon>
-                <p>Reservadamente</p>
+                <img src="./images/check.png" alt="">
             </div>
         </div>
+        
+        <div class="title">
+            <h1>Escolha a visibilidade:</h1>
+        </div>
+        <div class="visibility">
+            <div class="item selected" onclick="selectItem('visibility', this)">
+                <ion-icon name="lock-open"></ion-icon>
+                <p>Público</p>
+                <img src="./images/check.png" alt="">
+            </div>
+            <div class="item" onclick="selectItem('visibility', this)">
+                <ion-icon name="lock-closed"></ion-icon>
+                <p>Reservadamente</p>
+                <img src="./images/check.png" alt="">
+            </div>
+        </div>
+
     </div>
 
     <div class="table-login">
         <div class="login">
             <img src="./images/logo.png" alt="Bate papo UOL" />
-            <input type="text" placeholder="Digite seu nome" />
-            <button onclick='authUser()'>Entrar</button>
+            <div>
+                <input type="text" placeholder="Digite seu nome" />
+                <button onclick='authUser()'>Entrar</button>
+            </div>
         </div>
     </div>
     

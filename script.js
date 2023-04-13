@@ -5,9 +5,15 @@ const urlMsg = urlBase + 'messages';
 const urlStatus = urlBase + 'status';
 const timeRequestOnline = 5000;
 const timeRequestMsgs = 3000;
+const timeRequestUsers = 10 * 1000;
 let idIntervalOnline = 0;
 let idIntervalMsgs = 0;
+let idIntervalUsers = 0;
 let nickName = '';
+// bonus
+const inputMsg = document.querySelector('.footer input');
+const inputLogin = document.querySelector('.login input');
+
 
 // axios functions
 
@@ -39,15 +45,41 @@ function renderMsgs(res) {
                 html += `reservadamente para&nbsp;<p class="nick">${res.data[i].to}</p>:&nbsp;`;
                 break;
         }
-        html += `${res.data[i].text}</li>`;
+        html += res.data[i].text + '</li>';
     }
 
     list.innerHTML = html;
+    list.lastElementChild.scrollIntoView();
 }
 
 function treatGetMsgs(error) {
     console.error(error);
     alert('Infelizmente houve um erro ao carregar as mensagens. Tente novamente mais tarde.');
+}
+
+function renderUsers(response) {
+    let html = `<div class='item selected' onclick="selectItem('contacts', this)">
+                    <ion-icon name="people"></ion-icon>
+                    <p>Todos</p>
+                    <img src="./images/check.png" alt="">
+                </div>`;
+
+    for (let i = 0; i < response.data.length; i++) {
+        let user = response.data[i].name;
+
+        html += `<div class='item' onclick="selectItem('contacts', this)">
+                    <ion-icon name="people"></ion-icon>
+                    <p>${user}</p>
+                    <img src="./images/check.png" alt="">
+                </div>`;
+    }
+
+    document.querySelector('.contacts').innerHTML = html;
+}
+
+function treatGetUsers(error) {
+    console.error(error);
+    alert('Infelizmente houve um erro ao carregar os usuários!');
 }
 
 function getMessages() {
@@ -57,11 +89,22 @@ function getMessages() {
     promise.catch(treatGetMsgs);
 }
 
+function getUsers() {
+    let promise = axios.get(urlLogin);
+
+    promise.then(renderUsers);
+    promise.catch(treatGetUsers);
+}
+
 function initChat(response) {
     getMessages();
+    getUsers();
+
     document.querySelector('.table-login').classList.add('hidden');
+    
     idIntervalOnline = setInterval(online, timeRequestOnline);
     idIntervalMsgs = setInterval(getMessages, timeRequestMsgs);
+    idIntervalUsers = setInterval(getUsers, timeRequestUsers);
 }
 
 function treatAuthUser(error) {
@@ -84,11 +127,19 @@ function treatSendMsg(error) {
 
 function sendMsg() {
     const textMsg = document.querySelector('.footer input').value;
+    let typeMsg = document.querySelector('.visibility .selected p').innerHTML;
+
+    if (typeMsg === "Reservadamente") {
+        typeMsg = "private_message";
+    } else {
+        typeMsg = "message";
+    }
+
     const msg = {
         from: nickName,
-        to: "Todos",
+        to: document.querySelector('.contacts .selected p').innerHTML,
         text: textMsg,
-        type: "message"
+        type: typeMsg
     };
     let promise = axios.post(urlMsg, msg);
 
@@ -99,8 +150,40 @@ function sendMsg() {
     document.querySelector('.footer input').value = '';
 }
 
+// bonus functions
+
+function catchEnterMsg(keyboardEvent) {
+    if (keyboardEvent.key === 'Enter') {
+        sendMsg();
+    }
+}
+
+function catchEnterLogin(keyboardEvent) {
+    if (keyboardEvent.key === 'Enter') {
+        authUser();
+    }
+}
+
+function toggleSideBar() {
+    document.querySelector('.overlay').classList.toggle('hidden');
+    document.querySelector('.side-bar').classList.toggle('shown');
+}
+
+function selectItem(category, item) {
+    document.querySelector(`.${category} .selected`).classList.remove('selected');
+    item.classList.add('selected');
+
+    // message below input
+    const user = document.querySelector('.contacts .selected p').innerHTML;
+    const visibility = document.querySelector('.visibility .selected p').innerHTML.toLowerCase();
+    document.querySelector('.footer p').innerHTML = `Enviando para ${user} (${visibility})`;
+    
+}
 
 
 // execution of functions
 
 init();
+
+inputMsg.addEventListener("keyup", catchEnterMsg);
+inputLogin.addEventListener("keyup", catchEnterLogin);
