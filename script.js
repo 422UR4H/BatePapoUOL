@@ -33,7 +33,7 @@ function renderMsgs(res) {
         let type = res.data[i].type;
 
         html += `
-            <li class="msg ${type}"><p class="time">(${res.data[i].time})&nbsp;&nbsp;</p><p class=nick>${res.data[i].from}&nbsp;</p>
+            <li class="msg ${type}" data-test="message"><p class="time">(${res.data[i].time})&nbsp;&nbsp;</p><p class=nick>${res.data[i].from}&nbsp;</p>
         `;
 
         switch (type) {
@@ -58,7 +58,7 @@ function treatGetMsgs(error) {
 }
 
 function renderUsers(response) {
-    let html = `<div class='item selected' onclick="selectItem('contacts', this)">
+    let html = `<div class='item selected' onclick="selectItem('contacts', this)" data-test="all">
                     <ion-icon name="people"></ion-icon>
                     <p>Todos</p>
                     <img src="./images/check.png" alt="">
@@ -67,10 +67,10 @@ function renderUsers(response) {
     for (let i = 0; i < response.data.length; i++) {
         let user = response.data[i].name;
 
-        html += `<div class='item' onclick="selectItem('contacts', this)">
+        html += `<div class='item' onclick="selectItem('contacts', this)" data-test="participant">
                     <ion-icon name="people"></ion-icon>
                     <p>${user}</p>
-                    <img src="./images/check.png" alt="">
+                    <img src="./images/check.png" alt="" data-test="check" />
                 </div>`;
     }
 
