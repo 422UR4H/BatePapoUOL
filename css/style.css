@@ -51,27 +51,30 @@ ion-icon {
     height: 53px;
 }
 
-.desktop-content {
+.content {
     margin-top: 106px;
-    height: 40px;
+    margin-bottom: 90px;
     width: 100%;
 }
 
 .msg {
+    width: 100%;
     border-radius: 2px;
     padding: 13px 9px 13px 8px;
     margin-bottom: 4px;
+
+    display: flex;
 }
 
-.server {
+.status {
     background-color: #DCDCDC;
 }
 
-.private {
+.private_message {
     background-color: #FFDEDE;
 }
 
-.global {
+.message {
     background-color: white;
 }
 
@@ -79,7 +82,7 @@ ion-icon {
     color: #AAAAAA;
 }
 
-.nick-name {
+.nick {
     font-weight: 700;
 }
 
