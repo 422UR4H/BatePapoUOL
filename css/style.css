@@ -65,6 +65,8 @@ ion-icon {
 
     display: flex;
     flex-wrap: wrap;
+
+    word-break: break-word;
 }
 
 .status {
@@ -81,6 +83,7 @@ ion-icon {
 
 .time {
     color: #AAAAAA;
+    font-weight: 400;
 }
 
 .nick {

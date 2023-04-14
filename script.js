@@ -44,15 +44,16 @@ function renderMsgs(res) {
     for (let i = 0; i < res.data.length; i++) {
         const type = res.data[i].type;
 
-        html += `
-            <li class="msg ${type}" data-test="message"><p class="time">(${res.data[i].time})&nbsp;&nbsp;</p><p class=nick>${res.data[i].from}&nbsp;</p>
-        `;
+        html += `<li class="msg ${type}" data-test="message">
+                    <p><b class="time">(${res.data[i].time})</b>&nbsp;
+                    <strong>${res.data[i].from}</strong>
+                `;
         if (type === 'message') {
-            html += `para&nbsp;<p class="nick">${res.data[i].to}</p>:&nbsp;`;
-        } else {
-            html += `reservadamente para&nbsp;<p class="nick">${res.data[i].to}</p>:&nbsp;`;
+            html += `para <strong>${res.data[i].to}:&nbsp;</strong>`;
+        } else if (type === 'private_message') {
+            html += `reservadamente para <strong>${res.data[i].to}:&nbsp;</strong>`;
         }
-        html += res.data[i].text + '</li>';
+        html += res.data[i].text + '</p></li>';
     }
 
     list.innerHTML = html;
@@ -82,15 +83,12 @@ function renderUsers(response) {
                     <img src="./images/check.png" alt="" data-test="check" />
                 </div>`;
     }
-
     document.querySelector('.contacts').innerHTML = html;
 }
 
 function treatGetUsers(error) {
     console.error(error);
     alert('Infelizmente houve um erro ao carregar os usuários!');
-
-    offline(error);
 }
 
 function getMessages() {
@@ -125,8 +123,6 @@ function initChat(response) {
 function treatAuthUser(error) {
     console.error(error);
     alert('Infelizmente esse nick já está sendo usado. Tente outro!');
-
-    window.location.reload();
 }
 
 function authUser() {
