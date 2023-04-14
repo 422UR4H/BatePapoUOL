@@ -5,7 +5,7 @@ const urlMsg = urlBase + 'messages';
 const urlStatus = urlBase + 'status';
 const timeRequestOnline = 5000;
 const timeRequestMsgs = 3000;
-const timeRequestUsers = 10 * 1000;
+const timeRequestUsers = 10000;
 let idIntervalOnline = 0;
 let idIntervalMsgs = 0;
 let idIntervalUsers = 0;
@@ -38,24 +38,19 @@ function online() {
 }
 
 function renderMsgs(res) {
-    let list = document.querySelector('.content');
+    const list = document.querySelector('.content');
     let html = '';
-    
+
     for (let i = 0; i < res.data.length; i++) {
-        let type = res.data[i].type;
+        const type = res.data[i].type;
 
         html += `
             <li class="msg ${type}" data-test="message"><p class="time">(${res.data[i].time})&nbsp;&nbsp;</p><p class=nick>${res.data[i].from}&nbsp;</p>
         `;
-
-        switch (type) {
-            case 'message' :
-                html += `para&nbsp;<p class="nick">${res.data[i].to}</p>:&nbsp;`;
-                break;
-
-            case 'private_message' :
-                html += `reservadamente para&nbsp;<p class="nick">${res.data[i].to}</p>:&nbsp;`;
-                break;
+        if (type === 'message') {
+            html += `para&nbsp;<p class="nick">${res.data[i].to}</p>:&nbsp;`;
+        } else {
+            html += `reservadamente para&nbsp;<p class="nick">${res.data[i].to}</p>:&nbsp;`;
         }
         html += res.data[i].text + '</li>';
     }
@@ -67,6 +62,8 @@ function renderMsgs(res) {
 function treatGetMsgs(error) {
     console.error(error);
     alert('Infelizmente houve um erro ao carregar as mensagens. Tente novamente mais tarde.');
+
+    offline(error);
 }
 
 function renderUsers(response) {
@@ -77,7 +74,7 @@ function renderUsers(response) {
                 </div>`;
 
     for (let i = 0; i < response.data.length; i++) {
-        let user = response.data[i].name;
+        const user = response.data[i].name;
 
         html += `<div class='item' onclick="selectItem('contacts', this)" data-test="participant">
                     <ion-icon name="people"></ion-icon>
@@ -92,17 +89,19 @@ function renderUsers(response) {
 function treatGetUsers(error) {
     console.error(error);
     alert('Infelizmente houve um erro ao carregar os usuários!');
+
+    offline(error);
 }
 
 function getMessages() {
-    let promise = axios.get(urlMsg);
+    const promise = axios.get(urlMsg);
 
     promise.then(renderMsgs);
     promise.catch(treatGetMsgs);
 }
 
 function getUsers() {
-    let promise = axios.get(urlLogin);
+    const promise = axios.get(urlLogin);
 
     promise.then(renderUsers);
     promise.catch(treatGetUsers);
@@ -113,7 +112,7 @@ function initChat(response) {
     getUsers();
 
     document.querySelector('.table-login').classList.add('hidden');
-    
+
     idIntervalOnline = setInterval(online, timeRequestOnline);
     idIntervalMsgs = setInterval(getMessages, timeRequestMsgs);
     idIntervalUsers = setInterval(getUsers, timeRequestUsers);
@@ -122,19 +121,21 @@ function initChat(response) {
 function treatAuthUser(error) {
     console.error(error);
     alert('Infelizmente esse nick já está sendo usado. Tente outro!');
+
+    window.location.reload();
 }
 
 function authUser() {
     nickName = document.querySelector('.login input').value;
-    let promise = axios.post(urlLogin, { name: nickName });
-    
+    const promise = axios.post(urlLogin, { name: nickName });
+
     promise.then(initChat);
     promise.catch(treatAuthUser);
 }
 
 function treatSendMsg(error) {
     console.error(error);
-    window.location.reload();
+    offline(error);
 }
 
 function sendMsg() {
@@ -153,7 +154,7 @@ function sendMsg() {
         text: textMsg,
         type: typeMsg
     };
-    let promise = axios.post(urlMsg, msg);
+    const promise = axios.post(urlMsg, msg);
 
     promise.then(getMessages);
     promise.catch(treatSendMsg);
@@ -189,7 +190,6 @@ function selectItem(category, item) {
     const user = document.querySelector('.contacts .selected p').innerHTML;
     const visibility = document.querySelector('.visibility .selected p').innerHTML.toLowerCase();
     document.querySelector('.footer p').innerHTML = `Enviando para ${user} (${visibility})`;
-    
 }
 
 

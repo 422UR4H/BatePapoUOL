@@ -234,10 +234,6 @@ h1 {
     margin: 72px 0 94px;
 }
 
-.login input::-webkit-input-placeholder {
-    color: #AEAEAE;
-}
-
 .login input {
     font-size: 18px;
     line-height: 25px;
@@ -247,6 +243,10 @@ h1 {
     height: 54px;
     border: 1px solid #D7D7D7;
     border-radius: 4px;
+}
+
+.login input::-webkit-input-placeholder {
+    color: #AEAEAE;
 }
 
 .login button {
