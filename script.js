@@ -21,8 +21,20 @@ function init() {
     axios.defaults.headers.common['Authorization'] = accessToken;
 }
 
+function offline(error) {
+    console.log(error);
+
+    clearInterval(idIntervalOnline);
+    clearInterval(idIntervalMsgs);
+    clearInterval(idIntervalUsers);
+
+    window.location.reload();
+}
+
 function online() {
-    axios.post(urlStatus, { name: nickName });
+    const promise = axios.post(urlStatus, { name: nickName });
+
+    promise.catch(offline);
 }
 
 function renderMsgs(res) {
