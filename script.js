@@ -108,6 +108,10 @@ function getUsers() {
 }
 
 function initChat(response) {
+    if (response.status !== 200) {
+        window.location.reload();
+        return;
+    }
     getMessages();
     getUsers();
 
