@@ -41,20 +41,20 @@ function renderMsgs(res) {
     const list = document.querySelector('.content');
     let html = '';
 
-    for (let i = 0; i < res.data.length; i++) {
-        const type = res.data[i].type;
+    res.data.forEach((msg) => {
+        const type = msg.type;
 
         html += `<li class="msg ${type}" data-test="message">
-                    <p><b class="time">(${res.data[i].time}) </b>
-                    <strong>${res.data[i].from}</strong>
+                    <p><b class="time">(${msg.time}) </b>
+                    <strong>${msg.from}</strong>
                 `;
         if (type === 'message') {
-            html += `para <strong>${res.data[i].to}: </strong>`;
+            html += `para <strong>${msg.to}: </strong>`;
         } else if (type === 'private_message') {
-            html += `reservadamente para <strong>${res.data[i].to}: </strong>`;
+            html += `reservadamente para <strong>${msg.to}: </strong>`;
         }
-        html += res.data[i].text + '</p></li>';
-    }
+        html += msg.text + '</p></li>';
+    });
 
     list.innerHTML = html;
     list.lastElementChild.scrollIntoView();
@@ -92,25 +92,23 @@ function renderUsers(response) {
                 </div>`;
     }
 
-    for (let i = 0; i < response.data.length; i++) {
-        const user = response.data[i].name;
+    response.data.forEach((user) => {
+        const userName = user.name;
 
-        if (user === contactSelected) {
+        if (userName === contactSelected) {
             html += `<div class='item selected' onclick="selectItem('contacts', this)" data-test="participant">
                         <ion-icon name="people"></ion-icon>
-                        <p>${user}</p>
+                        <p>${userName}</p>
                         <img src="./images/check.png" alt="" data-test="check" />
                     </div>`;
-        } else if (user === nickName) {
-            continue;
-        } else {
+        } else if (userName !== nickName) {
             html += `<div class='item' onclick="selectItem('contacts', this)" data-test="participant">
                         <ion-icon name="people"></ion-icon>
-                        <p>${user}</p>
+                        <p>${userName}</p>
                         <img src="./images/check.png" alt="" data-test="check" />
                     </div>`;
         }
-    }
+    });
     document.querySelector('.contacts').innerHTML = html;
 
     renderRecipient();
