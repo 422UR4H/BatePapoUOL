@@ -45,13 +45,13 @@ function renderMsgs(res) {
         const type = res.data[i].type;
 
         html += `<li class="msg ${type}" data-test="message">
-                    <p><b class="time">(${res.data[i].time})</b>&nbsp;
+                    <p><b class="time">(${res.data[i].time}) </b>
                     <strong>${res.data[i].from}</strong>
                 `;
         if (type === 'message') {
-            html += `para <strong>${res.data[i].to}:&nbsp;</strong>`;
+            html += `para <strong>${res.data[i].to}: </strong>`;
         } else if (type === 'private_message') {
-            html += `reservadamente para <strong>${res.data[i].to}:&nbsp;</strong>`;
+            html += `reservadamente para <strong>${res.data[i].to}: </strong>`;
         }
         html += res.data[i].text + '</p></li>';
     }
@@ -67,23 +67,53 @@ function treatGetMsgs(error) {
     offline(error);
 }
 
+function renderRecipient() {
+    const contact = document.querySelector('.contacts .selected p').innerHTML;
+    const visibility = document.querySelector('.visibility .selected p').innerHTML.toLowerCase();
+    document.querySelector('.footer p').innerHTML = `Enviando para ${contact} (${visibility})`;
+}
+
 function renderUsers(response) {
-    let html = `<div class='item selected' onclick="selectItem('contacts', this)" data-test="all">
+    let contactSelected = document.querySelector('.contacts .selected p').innerHTML;
+    const userStillOnline = response.data.find((user) => user.name === contactSelected);
+    let html = '';
+
+    if (userStillOnline) {
+        html = `<div class='item' onclick="selectItem('contacts', this)" data-test="all">
+                    <ion-icon name="people"></ion-icon>
+                    <p>Todos</p>
+                    <img src="./images/check.png" alt="">
+                </div>`; 
+    } else {
+        html = `<div class='item selected' onclick="selectItem('contacts', this)" data-test="all">
                     <ion-icon name="people"></ion-icon>
                     <p>Todos</p>
                     <img src="./images/check.png" alt="">
                 </div>`;
+    }
 
     for (let i = 0; i < response.data.length; i++) {
         const user = response.data[i].name;
 
-        html += `<div class='item' onclick="selectItem('contacts', this)" data-test="participant">
-                    <ion-icon name="people"></ion-icon>
-                    <p>${user}</p>
-                    <img src="./images/check.png" alt="" data-test="check" />
-                </div>`;
+        if (user === contactSelected) {
+            html += `<div class='item selected' onclick="selectItem('contacts', this)" data-test="participant">
+                        <ion-icon name="people"></ion-icon>
+                        <p>${user}</p>
+                        <img src="./images/check.png" alt="" data-test="check" />
+                    </div>`;
+        } else if (user === nickName) {
+            continue;
+        } else {
+            html += `<div class='item' onclick="selectItem('contacts', this)" data-test="participant">
+                        <ion-icon name="people"></ion-icon>
+                        <p>${user}</p>
+                        <img src="./images/check.png" alt="" data-test="check" />
+                    </div>`;
+        }
     }
     document.querySelector('.contacts').innerHTML = html;
+
+    renderRecipient();
 }
 
 function treatGetUsers(error) {
@@ -186,10 +216,7 @@ function selectItem(category, item) {
     document.querySelector(`.${category} .selected`).classList.remove('selected');
     item.classList.add('selected');
 
-    // message below input
-    const user = document.querySelector('.contacts .selected p').innerHTML;
-    const visibility = document.querySelector('.visibility .selected p').innerHTML.toLowerCase();
-    document.querySelector('.footer p').innerHTML = `Enviando para ${user} (${visibility})`;
+    renderRecipient();
 }
 
 

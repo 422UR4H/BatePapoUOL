@@ -166,7 +166,7 @@ ion-icon {
     transform: translateX(-260px);
 }
 
-.side-bar ion-icon {
+.item ion-icon {
     width: 25px;
     height: 25px;
     margin-right: 6px;
@@ -189,6 +189,7 @@ h1 {
 .item {
     height: 36px;
     margin: 0 16px 1px 18px;
+
     display: flex;
     align-items: center;
 

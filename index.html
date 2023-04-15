@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="./css/reset.css" />
-    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./assets/styles/reset.css" />
+    <link rel="stylesheet" href="./assets/styles/style.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,6 +55,11 @@
         </div>
         <div class="contacts">
             <!-- code insert by script.js -->
+            <div class='item selected' onclick="selectItem('contacts', this)" data-test="all">
+                <ion-icon name="people"></ion-icon>
+                <p>Todos</p>
+                <img src="./images/check.png" alt="">
+            </div>;
         </div>
         
         <div class="title">
@@ -91,7 +96,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <!-- script -->
-    <script src="./script.js"></script>
+    <script src="./assets/script.js"></script>
 
     <!-- ion-icons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
