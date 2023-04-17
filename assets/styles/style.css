@@ -6,6 +6,10 @@ body {
     line-height: 20px;
 }
 
+button:hover {
+    cursor: pointer;
+}
+
 ion-icon {
     color: black;
 }
@@ -162,6 +166,12 @@ ion-icon {
     transition: all .2s ease-out;
 }
 
+.contacts {
+    height: 72%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 .shown {
     transform: translateX(-260px);
 }
@@ -187,13 +197,19 @@ h1 {
 }
 
 .item {
-    height: 36px;
+    /*height: 36px;*/
     margin: 0 16px 1px 18px;
+    padding-top: 5.5px;
+    padding-bottom: 5.5px;
 
     display: flex;
     align-items: center;
 
     position: relative;
+}
+
+.item:hover {
+    cursor: pointer;
 }
 
 .item img {
@@ -206,6 +222,8 @@ h1 {
 }
 
 .item p {
+    word-break: break-word;
+    width: 190px;
     margin-top: 5px;
 }
 

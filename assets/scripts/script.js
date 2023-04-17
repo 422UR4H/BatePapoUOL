@@ -37,12 +37,20 @@ function online() {
     promise.catch(offline);
 }
 
+function privateMsgFromOthers(type, to, from) {
+    return type === 'private_message' && (to !== nickName && from !== nickName);
+}
+
 function renderMsgs(res) {
     const list = document.querySelector('.content');
     let html = '';
 
     res.data.forEach((msg) => {
         const type = msg.type;
+
+        if (privateMsgFromOthers(type, msg.to, msg.from)) {
+            return;
+        }
 
         html += `<li class="msg ${type}" data-test="message">
                     <p><b class="time">(${msg.time}) </b>
