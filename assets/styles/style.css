@@ -27,10 +27,15 @@ ion-icon {
 .footer input {
     color: black;
     border: none;
+    width: 100%;
     font-size: 18px;
     line-height: 21.09px;
     margin-top: 12px;
     margin-bottom: 2px;
+}
+
+.footer > div {
+    width: 85%;
 }
 
 .header {
@@ -158,18 +163,14 @@ ion-icon {
     width: 260px;
     height: 100%;
 
+    overflow-y: scroll;
+
     position: fixed;
     right: -260px;
     top: 0px;
     z-index: 3;
 
     transition: all .2s ease-out;
-}
-
-.contacts {
-    height: 72%;
-    overflow-y: scroll;
-    overflow-x: hidden;
 }
 
 .shown {

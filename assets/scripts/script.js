@@ -24,6 +24,8 @@ function init() {
 function offline(error) {
     console.log(error);
 
+    alert('Você foi desconectado');
+
     clearInterval(idIntervalOnline);
     clearInterval(idIntervalMsgs);
     clearInterval(idIntervalUsers);
@@ -31,14 +33,8 @@ function offline(error) {
     window.location.reload();
 }
 
-function online() {
-    const promise = axios.post(urlStatus, { name: nickName });
-
-    promise.catch(offline);
-}
-
 function privateMsgFromOthers(type, to, from) {
-    return type === 'private_message' && (to !== nickName && from !== nickName);
+    return type === 'private_message' && to !== nickName && from !== nickName;
 }
 
 function renderMsgs(res) {
@@ -68,13 +64,6 @@ function renderMsgs(res) {
     list.lastElementChild.scrollIntoView();
 }
 
-function treatGetMsgs(error) {
-    console.error(error);
-    alert('Infelizmente houve um erro ao carregar as mensagens. Tente novamente mais tarde.');
-
-    offline(error);
-}
-
 function renderRecipient() {
     const contact = document.querySelector('.contacts .selected p').innerHTML;
     const visibility = document.querySelector('.visibility .selected p').innerHTML.toLowerCase();
@@ -82,7 +71,7 @@ function renderRecipient() {
 }
 
 function renderUsers(response) {
-    let contactSelected = document.querySelector('.contacts .selected p').innerHTML;
+    const contactSelected = document.querySelector('.contacts .selected p').innerHTML;
     const userStillOnline = response.data.find((user) => user.name === contactSelected);
     let html = '';
 
@@ -91,7 +80,7 @@ function renderUsers(response) {
                     <ion-icon name="people"></ion-icon>
                     <p>Todos</p>
                     <img src="./images/check.png" alt="">
-                </div>`; 
+                </div>`;
     } else {
         html = `<div class='item selected' onclick="selectItem('contacts', this)" data-test="all">
                     <ion-icon name="people"></ion-icon>
@@ -122,56 +111,55 @@ function renderUsers(response) {
     renderRecipient();
 }
 
-function treatGetUsers(error) {
-    console.error(error);
-    alert('Infelizmente houve um erro ao carregar os usuários!');
-}
-
 function getMessages() {
     const promise = axios.get(urlMsg);
 
     promise.then(renderMsgs);
-    promise.catch(treatGetMsgs);
+    promise.catch((error) => {
+        console.error(error);
+        alert('Infelizmente houve um erro ao carregar as mensagens. Tente novamente mais tarde.');
+        offline(error);
+    });
 }
 
 function getUsers() {
     const promise = axios.get(urlLogin);
 
     promise.then(renderUsers);
-    promise.catch(treatGetUsers);
+    promise.catch((error) => {
+        console.error(error);
+        alert('Infelizmente houve um erro ao carregar os usuários!');
+    });
 }
 
-function initChat(response) {
-    if (response.status !== 200) {
-        window.location.reload();
-        return;
-    }
-    getMessages();
-    getUsers();
-
-    document.querySelector('.table-login').classList.add('hidden');
-
-    idIntervalOnline = setInterval(online, timeRequestOnline);
-    idIntervalMsgs = setInterval(getMessages, timeRequestMsgs);
-    idIntervalUsers = setInterval(getUsers, timeRequestUsers);
-}
-
-function treatAuthUser(error) {
-    console.error(error);
-    alert('Infelizmente esse nick já está sendo usado. Tente outro!');
+function keepOnline() {
+    const promise = axios.post(urlStatus, { name: nickName });
+    promise.catch(offline);
 }
 
 function authUser() {
     nickName = document.querySelector('.login input').value;
     const promise = axios.post(urlLogin, { name: nickName });
 
-    promise.then(initChat);
-    promise.catch(treatAuthUser);
-}
+    promise.then(() => {
+        getMessages();
+        getUsers();
 
-function treatSendMsg(error) {
-    console.error(error);
-    offline(error);
+        document.querySelector('.table-login').classList.add('hidden');
+
+        idIntervalOnline = setInterval(keepOnline, timeRequestOnline);
+        idIntervalMsgs = setInterval(getMessages, timeRequestMsgs);
+        idIntervalUsers = setInterval(getUsers, timeRequestUsers);
+    });
+
+    promise.catch((error) => {
+        console.error(error);
+        if (error.response.status === 400) {
+            alert('Infelizmente esse nick já está sendo usado. Tente outro!');
+        } else {
+            alert('Infelizmente não foi possível acessar o servidor agora. Tente novamente mais tarde!');
+        }
+    });
 }
 
 function sendMsg() {
@@ -193,10 +181,15 @@ function sendMsg() {
     const promise = axios.post(urlMsg, msg);
 
     promise.then(getMessages);
-    promise.catch(treatSendMsg);
+    promise.catch((error) => {
+        console.error(error);
+        offline(error);
+    });
 
     // erase value of input
-    document.querySelector('.footer input').value = '';
+    let input = document.querySelector('.footer input');
+    input.value = '';
+    input.focus();
 }
 
 // bonus functions
